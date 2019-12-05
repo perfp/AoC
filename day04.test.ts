@@ -4,7 +4,7 @@ import { assert } from 'chai';
 const day04 = new Day04();
 day04.ignoreRange = true;
 
-describe.only("Day 4", () => {
+describe("Day 4", () => {
     it("can check number is six digit", () => {
         const input = 112233;
         const valid = day04.checkInput(input);

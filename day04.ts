@@ -1,9 +1,12 @@
+import {IntComputer} from './IntComputer';
+
 const input : string = "172851-675869";
 const [start, end] = input.split("-").map(s => Number.parseInt(s));
 
 export class Day04 {
     debug = false;
     ignoreRange: boolean = false;
+    intComputer = new IntComputer();
 
     checkInput(input: number) : boolean {
         if (input < 100000 || input > 999999) return false;
@@ -13,14 +16,7 @@ export class Day04 {
     }
 
     checkDigits(input : number) : boolean {
-        let digits = new Array<Number>(6);
-       
-        for (let i=0;i<6;i++){
-            let digit = input % 10;
-            if (this.debug) console.log(digit);
-            input = Math.floor(input / 10);
-            digits[5-i] = digit;
-        }
+        let digits = this.intComputer.getDigitsArray(input);
         if (this.debug) console.log(digits);
         let previous : Number = -1;
         
