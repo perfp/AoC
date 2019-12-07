@@ -11,7 +11,7 @@ export class Day03 {
                 if (e1.x == e2.x && e1.y == e2.y)
                 {
                     const distance = Math.abs(e2.x) + Math.abs(e2.y);
-                    console.log(`Intersection: ${e2.x},${e2.y}`);
+                    //console.log(`Intersection: ${e2.x},${e2.y}`);
                     if (smallestIntersection==0 || distance < smallestIntersection){
                         smallestIntersection = (distance);
                     }
