@@ -4,7 +4,7 @@ import {input} from './day05.input';
 const intComputer = new IntComputer();
 export class Day05 {
     run(){
-        const response = intComputer.runProgram(input, 5);
+        const response = intComputer.runProgram(input, [5]);
     }
 }
 

@@ -11,10 +11,11 @@ const HCF_99 = 99;
 
 export class IntComputer {
     debug: boolean = false;
-    inputValue: number = 1;
+    inputValues: number[] = [1];
     memory: number[] = [];
     ip : number = 0;
     done: boolean = false;
+    inputIndex: number = 0;
 
     getOperation(instruction: number) : Operation {
         const digits  = this.getDigitsArray(instruction);
@@ -24,12 +25,12 @@ export class IntComputer {
     }
     
     getDigitsArray(input: number) : Array<number> {        
-        const inputlen = Math.floor(Math.log10(input));
-        if (this.debug) console.log(inputlen);
+        const inputlen = (input < 10) ? 1 : Math.floor(Math.log10(input));
+        //if (this.debug) console.log("IL", inputlen);
         let digits = new Array<number>(inputlen);
         for (let i = 0; i <= inputlen; i++) {
             let digit = input % 10;
-            if (this.debug) console.log(digit);
+            //if (this.debug) console.log(digit);
             input = Math.floor(input / 10);
             digits[inputlen - i] = digit;
         }
@@ -86,7 +87,7 @@ export class IntComputer {
         if (operation.operator == undefined){
             throw new Error("Op Undefined");
         }
-        
+        //console.log(this.memory);
         return output;
     }
     
@@ -97,7 +98,7 @@ export class IntComputer {
         const arg1 = operation.parameter1mode ? p1 : this.memory[p1];
         const arg2 = operation.parameter2mode ? p2 : this.memory[p2];
         if (this.debug)
-            console.log(`Equals: ${arg1} ${arg2}${p3}: `);
+            console.log(`Equals: ${p1}:${arg1} == ${p2}:${arg2} set [${p3}]: `);
         if (arg1 == arg2)
             this.memory[p3] = 1;
         else
@@ -109,7 +110,7 @@ export class IntComputer {
         const arg1 = operation.parameter1mode ? p1 : this.memory[p1];
         const arg2 = operation.parameter2mode ? p2 : this.memory[p2];
         if (this.debug)
-            console.log(`Less than: ${arg1} ${arg2}${p3}: `);
+            console.log(`Less than: ${p1}:${arg1} < ${p2}:${arg2} Set [${p3}] `);
         if (arg1 < arg2)
             this.memory[p3] = 1;
         else
@@ -123,7 +124,7 @@ export class IntComputer {
         const test = operation.parameter1mode == 1 ? p1 : this.memory[p1];
         const value = operation.parameter2mode == 1 ? p2 : this.memory[p2];
         if (this.debug)
-            console.log(`Jump false: ${test} ${value}`);
+            console.log(`Jump false: ${p1}:${test} => ${value}`);
         this.ip += operation.getParamCount();
         if (!test)
             this.ip = value;
@@ -134,7 +135,7 @@ export class IntComputer {
         const test = operation.parameter1mode == 1 ? p1 : this.memory[p1];
         const value = operation.parameter2mode == 1 ? p2 : this.memory[p2];
         if (this.debug)
-            console.log(`Jump true: ${test} ${value}`);
+            console.log(`Jump true: ${p1}:${test} => ${value}`);
         this.ip += operation.getParamCount();
         if (test)
             this.ip = value;
@@ -144,28 +145,32 @@ export class IntComputer {
         
         const [posAddr] = this.memory.slice(this.ip);
         const outvalue = operation.parameter1mode ? posAddr : this.memory[posAddr];
-        console.log(`Output: ${outvalue}`);
+        if (this.debug) console.log(`Output: ${outvalue} ${posAddr}`);
         this.ip += operation.getParamCount();
         return outvalue;
     }
 
     private input(operation: Operation) {
+        // if (this.debug)
+        //     console.log("Inputs", this.inputValues, this.inputIndex);
+        const inputValue = this.inputValues[this.inputIndex++];
         const [posAddr] = this.memory.slice(this.ip);
         if (this.debug)
-            console.log(`Store: ${this.inputValue} ${posAddr}`);
-        this.memory[posAddr] = this.inputValue;
+            console.log(`Store: ${inputValue} ${posAddr}`);
+        this.memory[posAddr] = inputValue;
         this.ip += operation.getParamCount();
         ;
     }
 
     private add(operation: Operation) {
         const [posA1, posA2, posResult] = this.memory.slice(this.ip);
-        if (this.debug)
-        console.log(`Add: ${posA1} ${posA2} ${posResult}`);
+        
+        
         const p1 = operation.parameter1mode == 1 ? posA1 : this.memory[posA1];
         const p2 = operation.parameter2mode == 1 ? posA2 : this.memory[posA2];
         if (this.debug)
-        console.log(`Add: ${p1} ${p1} ${posResult}`);
+            console.log(`Add: ${posA1}:${p1} + ${posA2}:${p2}= ${p1+p2} [${posResult}]`);
+        
         this.memory[posResult] = p1 + p2;
         this.ip += operation.getParamCount();;
     }
@@ -173,18 +178,21 @@ export class IntComputer {
     private multiply(operation: Operation) {
 
         const [posA1, posA2, posResult] = this.memory.slice(this.ip);
-        if (this.debug)
-            console.log(`Mul: ${posA1} ${posA2} ${posResult}`);
+      
         const p1 = operation.parameter1mode == 1 ? posA1 : this.memory[posA1];
         const p2 = operation.parameter2mode == 1 ? posA2 : this.memory[posA2];
         if (this.debug)
-            console.log(`Mul: ${p1} ${p2} ${posResult}`);
+            console.log(`Mul: ${posA1}:${p1} * ${posA2}:${p2} = ${p1*p2} [${posResult}]`);
         this.memory[posResult] = p1 * p2;
         this.ip += operation.getParamCount();
     }
 
-    runProgram(memory: number[], inputValue = 1) : number {
-        this.inputValue = inputValue;
+    
+    runProgram(memory: number[], inputValues : number[]=[1]) : number {
+        this.ip = 0;
+        this.done = false;
+        this.inputIndex = 0;
+        this.inputValues = inputValues;
         this.memory = memory;
         let output : number | undefined;
        

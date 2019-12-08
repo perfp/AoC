@@ -1,4 +1,4 @@
-import {Day06 as Day} from './day06'; 
+import {Day07 as Day} from './day07'; 
 
 var day = new Day();
 day.run();

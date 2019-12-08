@@ -114,7 +114,7 @@ describe("Day05", () => {
     it("can compare input to 8", () => {
         const input = [3,9,8,9,10,9,4,9,99,-1,8];
         const intComputer = initializeIntComputer();
-        const result = intComputer.runProgram(input, 8);
+        const result = intComputer.runProgram(input, [8]);
         assert.equal(result, 1);
 
     });
@@ -122,19 +122,19 @@ describe("Day05", () => {
     it("can compare input lt 8", () => {
         const input = [3,9,7,9,10,9,4,9,99,-1,8];
         const intComputer = initializeIntComputer();
-        const result = intComputer.runProgram(input, 7);
+        const result = intComputer.runProgram(input, [7]);
         assert.equal(result, 1);
     });
     it("can compare input eq 8 immediate", () => {
         const input = [3,3,1108,-1,8,3,4,3,99];
         const intComputer = initializeIntComputer();
-        const result = intComputer.runProgram(input, 8);
+        const result = intComputer.runProgram(input, [8]);
         assert.equal(result, 1);
     });
     it("can compare input lt 8 immediate", () => {
         const input = [3,3,1107,-1,8,3,4,3,99];
         const intComputer = initializeIntComputer();
-        const result = intComputer.runProgram(input, 8);
+        const result = intComputer.runProgram(input, [8]);
         assert.equal(result, 0);
     });
 
@@ -144,7 +144,7 @@ describe("Day05", () => {
             999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99];
         const intComputer = initializeIntComputer();
 
-        const result = intComputer.runProgram(input, 7);
+        const result = intComputer.runProgram(input, [7]);
         assert.equal(result, 999);
 
     });    
