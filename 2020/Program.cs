@@ -10,7 +10,7 @@ namespace AOC2020
             Stopwatch sw = Stopwatch.StartNew();
             
             Console.WriteLine("Starting");
-            IDay day = new Day1();
+            IDay day = new Day2();
             if (args.Length > 0 && args[0] == "test"){
                 day.Test();
             } else {
