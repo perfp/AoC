@@ -32,20 +32,11 @@ namespace AOC2020
         {
             long trees = 1;
             var slopes = new[]{(1,1),(3,1),(5,1),(7,1), (1,2)};
-
-            foreach (var s in slopes)
-            {
-                var treesForSlope = CountTreesForSlope(input, s.Item1, s.Item2);
-                Console.Write($"{treesForSlope} ");
-                trees *= treesForSlope;
-                Console.WriteLine($" {trees}");
-            }
-            Console.WriteLine();
-
+            foreach (var s in slopes) trees *= CountTreesForSlope(input, s);
             Console.WriteLine($"Found {trees} trees");
         }
 
-        private static int CountTreesForSlope(string[] input, int x, int y)
+        private static int CountTreesForSlope(string[] input, (int x, int y) slope)
         {
             var r = 0;
             var c = 0;
@@ -54,8 +45,8 @@ namespace AOC2020
             var trees = 0;
             while (true)
             {
-                c += x;
-                r += y;
+                c += slope.x;
+                r += slope.y;
                 if (c >= w) c -= w;
                 if (r >= input.Length) break;
                 if (input[r][c] == '#') trees++;
