@@ -6,7 +6,7 @@ namespace AOC2020 {
     {
         public void Run()
         {
-            var input = new Input().ReadFile("day2.txt");
+            var input = this.ReadInput();
             Solve2(input);
         }
 

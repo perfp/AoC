@@ -7,11 +7,23 @@ namespace AOC2020
     {
         static void Main(string[] args)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            
+            if (args.Length < 1){
+                Console.WriteLine("Du mangler dag!");
+                return;
+            }
+            int dayNumber = 0;
+            try {
+                dayNumber = Int32.Parse(args[0]);
+            } catch {
+                Console.WriteLine("Ugyldig dag " + args[0] );
+                return;
+            }
+
+            IDay day = (IDay)Activator.CreateInstance(Type.GetType($"AOC2020.Day{dayNumber}, 2020"));
             Console.WriteLine("Starting");
-            IDay day = new Day2();
-            if (args.Length > 0 && args[0] == "test"){
+            
+            Stopwatch sw = Stopwatch.StartNew();
+            if (args.Length > 1 && args[1] == "test"){
                 day.Test();
             } else {
                 day.Run();
