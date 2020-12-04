@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AOC2020{
     public class Day4 : IDay
@@ -58,7 +59,7 @@ namespace AOC2020{
                 if (line.Trim() == "")
                 {
                     passports.Add(passportDict);
-                    if (passportDict.Keys.Where(k => k != "cid").Count() == 7) valid++;
+                    if (IsValid(passportDict)) valid++;
                     passportDict = new Dictionary<string, string>();
                 }
                 else
@@ -71,10 +72,73 @@ namespace AOC2020{
                     }
                 }
             }
-            if (passportDict.Keys.Where(k => k != "cid").Count() == 7) valid++;
+            if (IsValid(passportDict)) valid++;
             passports.Add(passportDict);
             string output = $"Antall pass: {passports.Count} Valid: {valid}";
             Console.WriteLine(output);
+        }
+
+        static bool IsValid(Dictionary<string, string> passportDict)
+        {
+            return 
+                validateByr(passportDict) &&
+                validateIyr(passportDict) &&
+                validateEyr(passportDict) &&
+                validateHgt(passportDict) &&
+                validateHcl(passportDict) &&
+                validateEcl(passportDict) &&
+                validatePid(passportDict);
+            ;
+        }
+
+        private static bool validateEyr(Dictionary<string, string> passportDict)
+        {
+           return  passportDict.ContainsKey("eyr") &&
+                    Int32.Parse(passportDict["eyr"]) >= 2020 &&
+                    Int32.Parse(passportDict["eyr"]) <= 2030;
+        }
+
+        private static bool validatePid(Dictionary<string, string> passportDict)
+        {
+            return passportDict.ContainsKey("pid") && Regex.Match(passportDict["pid"], @"^\d{9}$").Success;
+        }
+
+        private static bool validateEcl(Dictionary<string, string> passportDict)
+        {
+            return passportDict.ContainsKey("ecl") &&
+                new string[]{"amb", "blu", "brn", "gry", "grn", "hzl", "oth"}.Contains(passportDict["ecl"]);
+        }
+
+        private static bool validateByr(Dictionary<string, string> passportDict)  
+        {
+            return  passportDict.ContainsKey("byr") &&
+                    Int32.Parse(passportDict["byr"]) >= 1920 &&
+                    Int32.Parse(passportDict["byr"]) <= 2002;
+        }
+
+        private static bool validateIyr(Dictionary<string, string> passportDict)  
+        {
+            return  passportDict.ContainsKey("iyr") &&
+                    Int32.Parse(passportDict["iyr"]) >= 2010 &&
+                   Int32.Parse(passportDict["iyr"]) <= 2020;
+        }
+        private static bool validateHgt(Dictionary<string, string> passportDict)  
+        {
+            return passportDict.ContainsKey("hgt") && (passportDict["hgt"].EndsWith("cm") || passportDict["hgt"].EndsWith("in")) ?
+                            passportDict["hgt"].EndsWith("cm") ?
+                                Int32.Parse(passportDict["hgt"].Replace("cm", "")) >= 150 &&
+                                Int32.Parse(passportDict["hgt"].Replace("cm", "")) <= 193 :
+                                Int32.Parse(passportDict["hgt"].Replace("in", "")) >= 59 &&
+                                Int32.Parse(passportDict["hgt"].Replace("in", "")) <= 76 :
+                                false ;
+        }
+
+        static bool validateHcl(Dictionary<string, string> d){
+            
+            if (!d.ContainsKey("hcl")) return false;
+
+            var hcl = d["hcl"];
+            return Regex.Match(hcl, "#[a-f0-9]{6}").Success;
         }
 
     }
