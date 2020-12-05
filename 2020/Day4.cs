@@ -48,7 +48,7 @@ namespace AOC2020{
 
         }
 
-        private static void Solve(string[] input)
+        private void Solve(string[] input)
         {
             var passports = new List<Dictionary<string, string>>();
             var passportDict = new Dictionary<string, string>();
@@ -58,7 +58,7 @@ namespace AOC2020{
                 if (line.Trim() == "")
                 {
                     passports.Add(passportDict);
-                    if (passportDict.Keys.Where(k => k != "cid").Count() == 7) valid++;
+                    if (IsValid(passportDict)) valid++;
                     passportDict = new Dictionary<string, string>();
                 }
                 else
@@ -71,11 +71,16 @@ namespace AOC2020{
                     }
                 }
             }
-            if (passportDict.Keys.Where(k => k != "cid").Count() == 7) valid++;
+            if (IsValid(passportDict)) valid++;
             passports.Add(passportDict);
+
+            
             string output = $"Antall pass: {passports.Count} Valid: {valid}";
             Console.WriteLine(output);
         }
 
+        private bool IsValid(Dictionary<string, string> passportDict){
+            return passportDict.Keys.Where(k => k != "cid").Count() == 7;
+        }
     }
 }
