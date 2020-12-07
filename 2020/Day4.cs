@@ -49,7 +49,7 @@ namespace AOC2020{
 
         }
 
-        private static void Solve(string[] input)
+        private void Solve(string[] input)
         {
             var passports = new List<Dictionary<string, string>>();
             var passportDict = new Dictionary<string, string>();
@@ -74,6 +74,8 @@ namespace AOC2020{
             }
             if (IsValid(passportDict)) valid++;
             passports.Add(passportDict);
+
+            
             string output = $"Antall pass: {passports.Count} Valid: {valid}";
             Console.WriteLine(output);
         }
