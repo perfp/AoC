@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -b session=53616c7465645f5f8545db73b7ccf214c3aa5d4a6571448ccca286d771b7e9d74aa5ef54cd4225387b1c3011e7b9534fa02cc43e76fc746386140225ef4b5a66 https://adventofcode.com/2022/day/$1/input -o input$1.txt
