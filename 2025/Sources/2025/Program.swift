@@ -6,12 +6,12 @@ import Foundation
 struct Program {
     static func main() {
         do {
-        let path = "./input.txt"
+        let path = "./input2.txt"
         let content = try String(contentsOfFile: path, encoding: .utf8)
         let lines = content.components(separatedBy: .newlines)
 
-        let d1 = Day1()
-        _ = d1.part1(input: lines)
+        let d1 = Day2()
+        _ = d1.part2(input: lines[0])
 
         } catch {
             print ("Error: \(error)")
